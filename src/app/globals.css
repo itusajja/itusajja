@@ -1,0 +1,423 @@
+@import "tailwindcss";
+
+/* class-based dark mode (driven by next-themes) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* -------------------------------------------------------------------------- */
+/*  Design tokens                                                              */
+/* -------------------------------------------------------------------------- */
+
+:root {
+  /* surfaces */
+  --bg: #eceff5;
+  --bg-grain: #dfe4ee;
+  --paper: #ffffff;
+  --paper-raised: #f8fafc;
+
+  /* type */
+  --ink: #0f172a;
+  --muted: #55627a;
+  --faint: #8b96a9;
+
+  /* lines + accent */
+  --line: #e2e7f0;
+  --line-strong: #cfd7e5;
+  --accent: #1e4fd8;
+  --accent-hover: #1741b4;
+  --accent-soft: #eaefff;
+  --accent-ink: #ffffff;
+  --accent-ring: rgba(30, 79, 216, 0.18);
+
+  --sheet-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04), 0 12px 32px -12px rgba(15, 23, 42, 0.18),
+    0 40px 80px -40px rgba(15, 23, 42, 0.22);
+  --nav-bg: rgba(255, 255, 255, 0.72);
+
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #05070d;
+  --bg-grain: #0a0f1a;
+  --paper: #0b101b;
+  --paper-raised: #101725;
+
+  --ink: #e9eef9;
+  --muted: #98a5bd;
+  --faint: #6b7891;
+
+  --line: #1a2333;
+  --line-strong: #26314a;
+  --accent: #7ba4ff;
+  --accent-hover: #9dbaff;
+  --accent-soft: #121c33;
+  --accent-ink: #05070d;
+  --accent-ring: rgba(123, 164, 255, 0.22);
+
+  --sheet-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.045),
+    0 24px 60px -30px rgba(0, 0, 0, 0.9);
+  --nav-bg: rgba(8, 12, 20, 0.72);
+
+  color-scheme: dark;
+}
+
+@theme inline {
+  /* Self-hosted variable fonts — see the @fontsource imports in layout.tsx */
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
+  --font-display: "Sora Variable", "Inter Variable", ui-sans-serif, system-ui,
+    sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular,
+    "SF Mono", Menlo, monospace;
+
+  --color-bg: var(--bg);
+  --color-paper: var(--paper);
+  --color-raised: var(--paper-raised);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-ink: var(--accent-ink);
+
+  --shadow-sheet: var(--sheet-shadow);
+
+  --ease-silk: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-curtain: cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Base                                                                       */
+/* -------------------------------------------------------------------------- */
+
+* {
+  border-color: var(--line);
+}
+
+html {
+  scroll-behavior: smooth;
+  /* offset anchored sections below the sticky nav */
+  scroll-padding-top: 5.5rem;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "cv02", "cv03", "cv04", "ss01";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+/* Ambient page texture: two soft accent washes + a fine grid */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      60rem 40rem at 12% -8%,
+      var(--accent-ring),
+      transparent 62%
+    ),
+    radial-gradient(
+      48rem 36rem at 96% 4%,
+      color-mix(in srgb, var(--accent) 10%, transparent),
+      transparent 60%
+    );
+  opacity: 0.85;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, var(--line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(70% 55% at 50% 0%, #000 10%, transparent 78%);
+  opacity: 0.5;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border-radius: 99px;
+  border: 3px solid var(--bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--faint);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Components / utilities                                                     */
+/* -------------------------------------------------------------------------- */
+
+/* Placeholder text — values still to be lifted from the PDF.
+   The bracket characters are hidden and the content gets a dashed underline. */
+.ph {
+  color: var(--faint);
+  border-bottom: 1px dashed var(--line-strong);
+  cursor: help;
+}
+
+.sheet {
+  background: var(--paper);
+  box-shadow: var(--sheet-shadow);
+}
+
+.hairline {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--line-strong) 18%,
+    var(--line-strong) 82%,
+    transparent
+  );
+}
+
+.accent-bar {
+  background: linear-gradient(
+    90deg,
+    var(--accent),
+    color-mix(in srgb, var(--accent) 45%, #ffffff)
+  );
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.card {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: 0.875rem;
+  background: var(--paper);
+  transition:
+    border-color 0.35s var(--ease-silk),
+    box-shadow 0.35s var(--ease-silk),
+    transform 0.35s var(--ease-silk),
+    background-color 0.35s var(--ease-silk);
+}
+
+.card:hover {
+  border-color: color-mix(in srgb, var(--accent) 38%, var(--line));
+  background: var(--paper-raised);
+  box-shadow: 0 18px 40px -26px var(--accent-ring);
+  transform: translateY(-2px);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid var(--line);
+  background: var(--paper-raised);
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+  transition:
+    color 0.25s var(--ease-silk),
+    border-color 0.25s var(--ease-silk),
+    background-color 0.25s var(--ease-silk),
+    transform 0.25s var(--ease-silk);
+}
+
+a.chip:hover,
+button.chip:hover {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+  background: var(--accent-soft);
+  transform: translateY(-1px);
+}
+
+/* Small caps section eyebrow */
+.eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* Shimmer sweep used on the splash progress bar */
+@keyframes sheen {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(220%);
+  }
+}
+
+.sheen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 80%
+  );
+  animation: sheen 1.6s var(--ease-silk) infinite;
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(0, -14px, 0) scale(1.04);
+  }
+}
+
+.float-slow {
+  animation: float-slow 9s ease-in-out infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 var(--accent-ring);
+  }
+  70% {
+    box-shadow: 0 0 0 12px transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+.pulse-ring {
+  animation: pulse-ring 2.6s ease-out infinite;
+}
+
+/* Lock scrolling while the splash screen is on stage */
+html.splash-lock,
+html.splash-lock body {
+  overflow: hidden !important;
+  height: 100%;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Reduced motion                                                             */
+/* -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .sheen::after,
+  .float-slow,
+  .pulse-ring {
+    display: none;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Print — the web page collapses back into a clean one-page document         */
+/* -------------------------------------------------------------------------- */
+
+@media print {
+  @page {
+    margin: 14mm;
+    size: A4;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  body::before,
+  body::after {
+    display: none !important;
+  }
+
+  .no-print,
+  nav,
+  .splash-root {
+    display: none !important;
+  }
+
+  .sheet {
+    box-shadow: none !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+  }
+
+  .card {
+    border-color: #ddd !important;
+    box-shadow: none !important;
+    background: #fff !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .ph {
+    color: #000 !important;
+    border-bottom: 0 !important;
+  }
+
+  /* placeholders print as their bracketed text, nothing fancier */
+  a[href]::after {
+    content: "";
+  }
+
+  section {
+    break-inside: avoid-page;
+  }
+
+  h1,
+  h2,
+  h3 {
+    break-after: avoid-page;
+  }
+}
