@@ -122,10 +122,10 @@ body {
   overflow-x: hidden;
 }
 
-/* A4-proportioned résumé sheet, centered on a quiet desktop canvas. The sheet
-   can grow beyond one page when content needs it, while retaining A4 width. */
+/* Résumé sheet, centered on a quiet desktop canvas. The sheet is 1100px wide
+   and can grow beyond one page when content needs it. */
 .resume-paper {
-  width: min(calc(100% - clamp(0rem, 8vw, 6rem)), 210mm);
+  width: min(calc(100% - clamp(0rem, 8vw, 6rem)), 1100px);
   min-height: 297mm;
   margin: clamp(0rem, 4vw, 3rem) auto;
   overflow: hidden;
