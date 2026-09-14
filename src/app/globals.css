@@ -1,0 +1,364 @@
+@import "tailwindcss";
+
+/* class-based dark mode (driven by next-themes) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* -------------------------------------------------------------------------- */
+/*  Design tokens — sampled to match the source résumé document                */
+/* -------------------------------------------------------------------------- */
+
+:root {
+  /* the periwinkle page */
+  --bg: #ccd9f2;
+  --bg-deep: #c3d2ef;
+
+  /* surfaces */
+  --paper: #ffffff; /* contact pill, avatar ring */
+  --surface: #d9e4f8; /* light-blue bullet boxes */
+  --surface-soft: rgba(255, 255, 255, 0.5);
+
+  /* type */
+  --ink: #1b2c90; /* navy headings + name */
+  --body: #232a3d; /* paragraph text */
+  --muted: #3c4763;
+  --blue: #2e7fd2; /* secondary blue: subtitle, companies, links */
+  --orange: #f2691d; /* logo + OPEN TO WORK */
+  --orange-deep: #ef5a10;
+
+  /* lines / tracks / nodes */
+  --line: rgba(27, 44, 144, 0.16);
+  --line-strong: rgba(27, 44, 144, 0.3);
+  --track: #ffffff; /* skill-bar track */
+  --node: #1b2c90; /* experience timeline node */
+  --node-edu: #2e7fd2; /* education timeline node */
+
+  --nav-bg: rgba(204, 217, 242, 0.78);
+  --pill-shadow: 0 6px 22px -10px rgba(27, 44, 144, 0.35);
+
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #0a1130;
+  --bg-deep: #070d26;
+
+  --paper: #131c44;
+  --surface: #15204b;
+  --surface-soft: rgba(255, 255, 255, 0.06);
+
+  --ink: #e2e9ff;
+  --body: #c3cff2;
+  --muted: #93a2d2;
+  --blue: #6fa9ec;
+  --orange: #ff8a3d;
+  --orange-deep: #f97316;
+
+  --line: rgba(226, 233, 255, 0.16);
+  --line-strong: rgba(226, 233, 255, 0.32);
+  --track: #1d2a5c;
+  --node: #e2e9ff;
+  --node-edu: #6fa9ec;
+
+  --nav-bg: rgba(10, 17, 48, 0.78);
+  --pill-shadow: 0 8px 26px -12px rgba(0, 0, 0, 0.7);
+
+  color-scheme: dark;
+}
+
+@theme inline {
+  /* Self-hosted variable fonts — see the @fontsource imports in layout.tsx */
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
+  --font-display: "Sora Variable", "Inter Variable", ui-sans-serif, system-ui,
+    sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular,
+    "SF Mono", Menlo, monospace;
+
+  --color-bg: var(--bg);
+  --color-bg-deep: var(--bg-deep);
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-body: var(--body);
+  --color-muted: var(--muted);
+  --color-blue: var(--blue);
+  --color-orange: var(--orange);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-track: var(--track);
+  --color-node: var(--node);
+  --color-node-edu: var(--node-edu);
+
+  --shadow-pill: var(--pill-shadow);
+
+  --ease-silk: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-curtain: cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Base                                                                       */
+/* -------------------------------------------------------------------------- */
+
+* {
+  border-color: var(--line);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--body);
+  font-family: var(--font-sans);
+  font-feature-settings: "cv02", "cv03", "cv04", "ss01";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+  /* soft vertical wash so the page reads as one continuous sheet */
+  background-image: linear-gradient(
+    180deg,
+    var(--bg) 0%,
+    var(--bg-deep) 55%,
+    var(--bg) 100%
+  );
+}
+
+::selection {
+  background: var(--orange);
+  color: #fff;
+}
+
+::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-deep);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border-radius: 99px;
+  border: 3px solid var(--bg-deep);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--blue);
+}
+
+:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Components / utilities                                                     */
+/* -------------------------------------------------------------------------- */
+
+.text-balance {
+  text-wrap: balance;
+}
+
+/* serif section headings, matching the source document's titles */
+.heading-serif {
+  font-family: Georgia, "Times New Roman", Times, "Noto Serif", serif;
+  letter-spacing: 0.01em;
+}
+
+/* white rounded contact pill */
+.pill-white {
+  background: var(--paper);
+  border-radius: 999px;
+  box-shadow: var(--pill-shadow);
+}
+
+/* light-blue rounded box that holds the italic bullet lists */
+.box-soft {
+  background: var(--surface);
+  border-radius: 0.75rem;
+}
+
+/* circular brand / flag badge */
+.badge-circle {
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  box-shadow: 0 3px 10px -4px rgba(0, 0, 0, 0.35);
+  flex: none;
+}
+
+.accent-bar {
+  background: linear-gradient(
+    90deg,
+    var(--orange),
+    color-mix(in srgb, var(--orange) 55%, #ffd9b0)
+  );
+}
+
+.blue-bar {
+  background: var(--blue);
+}
+
+/* timeline vertical spine */
+.timeline-line {
+  background: var(--node);
+}
+
+/* nav blur */
+.nav-blur {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* Shimmer sweep used on the splash progress bar */
+@keyframes sheen {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(220%);
+  }
+}
+.sheen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 80%
+  );
+  animation: sheen 1.6s var(--ease-silk) infinite;
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(0, -14px, 0) scale(1.04);
+  }
+}
+.float-slow {
+  animation: float-slow 9s ease-in-out infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--orange) 45%, transparent);
+  }
+  70% {
+    box-shadow: 0 0 0 12px transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+.pulse-ring {
+  animation: pulse-ring 2.6s ease-out infinite;
+}
+
+/* Lock scrolling while the splash screen is on stage */
+html.splash-lock,
+html.splash-lock body {
+  overflow: hidden !important;
+  height: 100%;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Reduced motion                                                             */
+/* -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .sheen::after,
+  .float-slow,
+  .pulse-ring {
+    display: none;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Print — collapse back to a clean one-page document                         */
+/* -------------------------------------------------------------------------- */
+
+@media print {
+  @page {
+    margin: 10mm;
+    size: A4;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  .no-print,
+  nav,
+  .splash-root {
+    display: none !important;
+  }
+
+  /* flatten the periwinkle theme to print-friendly values */
+  :root,
+  .dark {
+    --bg: #fff;
+    --bg-deep: #fff;
+    --paper: #fff;
+    --surface: #f2f5fb;
+    --ink: #101a4d;
+    --body: #111;
+    --muted: #333;
+    --blue: #1c5fa8;
+    --orange: #c2410c;
+    --line: #ccc;
+    --line-strong: #999;
+    --track: #e5e7eb;
+    --node: #101a4d;
+    --node-edu: #1c5fa8;
+    --pill-shadow: none;
+  }
+
+  .pill-white {
+    box-shadow: none !important;
+    border: 1px solid #ddd;
+  }
+
+  .box-soft {
+    border: 1px solid #e2e6ee;
+  }
+
+  section,
+  article,
+  li {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  h1,
+  h2,
+  h3 {
+    break-after: avoid-page;
+  }
+
+  a[href]::after {
+    content: "";
+  }
+}
