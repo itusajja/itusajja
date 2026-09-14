@@ -8,6 +8,9 @@
 /* -------------------------------------------------------------------------- */
 
 :root {
+  /* neutral desktop surrounding the centered résumé sheet */
+  --desk: #e9ebef;
+
   /* the periwinkle page */
   --bg: #ccd9f2;
   --bg-deep: #c3d2ef;
@@ -39,6 +42,7 @@
 }
 
 .dark {
+  --desk: #050816;
   --bg: #0a1130;
   --bg-deep: #070d26;
 
@@ -109,20 +113,31 @@ html {
 }
 
 body {
-  background-color: var(--bg);
+  background: var(--desk);
   color: var(--body);
   font-family: var(--font-sans);
   font-feature-settings: "cv02", "cv03", "cv04", "ss01";
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
-  /* soft vertical wash so the page reads as one continuous sheet */
+}
+
+/* A4-proportioned résumé sheet, centered on a quiet desktop canvas. The sheet
+   can grow beyond one page when content needs it, while retaining A4 width. */
+.resume-paper {
+  width: min(calc(100% - clamp(0rem, 8vw, 6rem)), 210mm);
+  min-height: 297mm;
+  margin: clamp(0rem, 4vw, 3rem) auto;
+  overflow: hidden;
+  background-color: var(--bg);
   background-image: linear-gradient(
     180deg,
     var(--bg) 0%,
     var(--bg-deep) 55%,
     var(--bg) 100%
   );
+  box-shadow: 0 24px 70px -28px rgba(24, 32, 55, 0.42),
+    0 2px 8px rgba(24, 32, 55, 0.1);
 }
 
 ::selection {
@@ -182,10 +197,11 @@ a:visited {
   color: var(--muted);
 }
 
-/* serif section headings, matching the source document's titles */
+/* Clean geometric headings pair with Inter for a modern, professional résumé. */
 .heading-serif {
-  font-family: Georgia, "Times New Roman", Times, "Noto Serif", serif;
-  letter-spacing: 0.01em;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.025em;
 }
 
 /* white rounded contact pill */
@@ -329,6 +345,15 @@ html.splash-lock body {
     color: #000 !important;
     overflow: visible !important;
     height: auto !important;
+  }
+
+  .resume-paper {
+    width: 100%;
+    min-height: 0;
+    margin: 0;
+    overflow: visible;
+    background: #fff !important;
+    box-shadow: none;
   }
 
   .no-print,

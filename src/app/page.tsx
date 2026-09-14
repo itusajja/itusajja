@@ -14,7 +14,7 @@ import { Experience } from "@/components/sections/Experience";
  */
 export default function Home() {
   return (
-    <div>
+    <article className="resume-paper">
       <Hero />
 
       <div className="mx-auto grid w-full max-w-5xl gap-x-12 gap-y-12 px-5 pb-6 sm:px-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-x-16">
@@ -32,6 +32,6 @@ export default function Home() {
       </div>
 
       <Footer />
-    </div>
+    </article>
   );
 }
