@@ -28,19 +28,32 @@ export function Experience() {
       </SectionTitle>
 
       <ol ref={ref} className="relative mt-8 space-y-9">
-        {/* navy spine through the briefcase nodes */}
-        <motion.span
-          className="timeline-line absolute top-2 bottom-2 left-[6.6rem] w-[2.5px] origin-top rounded sm:left-[7.6rem]"
-          initial={{ scaleY: 0 }}
-          animate={show ? { scaleY: 1 } : { scaleY: 0 }}
-          transition={{ duration: reduce ? 0.001 : 1.6, ease: SILK }}
-          aria-hidden="true"
-        />
-
         <RevealGroup gap={0.13}>
           {resume.experience.map((job, i) => (
             <RevealItem key={`${job.company}-${i}`} direction="left" distance={22}>
-              <li className="grid grid-cols-[5.6rem_auto_1fr] items-start gap-x-3 sm:grid-cols-[6.6rem_auto_1fr] sm:gap-x-4">
+              <li className="relative grid grid-cols-[5.6rem_auto_1fr] items-start gap-x-3 sm:grid-cols-[6.6rem_auto_1fr] sm:gap-x-4">
+                {/* spine segment: from this row's node centre exactly to the
+                    next row's node centre (node mt-0.5 + h-8/2 = 1.125rem;
+                    row gap space-y-9 = 2.25rem). Runs through the middle of
+                    the node column, which starts after the date + grid gap. */}
+                {i < resume.experience.length - 1 && (
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute top-[1.125rem] -bottom-[3.375rem] left-[calc(5.6rem+0.75rem)] flex w-8 justify-center sm:left-[calc(6.6rem+1rem)]"
+                  >
+                    <motion.span
+                      className="timeline-line h-full w-[2.5px] origin-top rounded"
+                      initial={{ scaleY: 0 }}
+                      animate={show ? { scaleY: 1 } : { scaleY: 0 }}
+                      transition={{
+                        duration: reduce ? 0.001 : 1,
+                        ease: SILK,
+                        delay: reduce ? 0 : 0.25 + i * 0.13,
+                      }}
+                    />
+                  </span>
+                )}
+
                 <span className="pt-1 text-right text-[0.8125rem] font-extrabold text-[#1f2740] dark:text-[var(--body)]">
                   {job.period}
                 </span>
@@ -69,9 +82,14 @@ export function Experience() {
                         {job.bullets.map((b, bi) => (
                           <li
                             key={bi}
-                            className="text-[0.8125rem] leading-relaxed text-[#2a3350] italic dark:text-[var(--body)]"
+                            className="flex gap-x-2 text-[0.8125rem] leading-relaxed text-[#2a3350] italic dark:text-[var(--body)]"
                           >
-                            - {b}
+                            {/* hanging-indent bullet: wrapped lines stay
+                                aligned under the text, not under the dash */}
+                            <span aria-hidden="true" className="flex-none">
+                              -
+                            </span>
+                            <span className="min-w-0">{b}</span>
                           </li>
                         ))}
                       </ul>

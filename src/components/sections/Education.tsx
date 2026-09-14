@@ -23,20 +23,33 @@ export function Education() {
       <SectionTitle>Education History</SectionTitle>
 
       <ol ref={ref} className="relative mt-6 space-y-6">
-        {/* connecting spine through the nodes */}
-        <motion.span
-          className="absolute top-2 bottom-2 left-[6.4rem] w-[2px] origin-top rounded sm:left-[7.4rem]"
-          style={{ background: "var(--node-edu)" }}
-          initial={{ scaleY: 0 }}
-          animate={show ? { scaleY: 1 } : { scaleY: 0 }}
-          transition={{ duration: reduce ? 0.001 : 1.3, ease: SILK }}
-          aria-hidden="true"
-        />
-
         <RevealGroup gap={0.12}>
           {resume.education.map((ed, i) => (
             <RevealItem key={ed.title} direction="right" distance={20}>
-              <li className="grid grid-cols-[5.4rem_auto_1fr] items-start gap-x-3 sm:grid-cols-[6.4rem_auto_1fr] sm:gap-x-4">
+              <li className="relative grid grid-cols-[5.4rem_auto_1fr] items-start gap-x-3 sm:grid-cols-[6.4rem_auto_1fr] sm:gap-x-4">
+                {/* spine segment: node centre sits at mt-0.5 + h-7/2 = 1rem,
+                    and the next node centre is one row gap below (space-y-6
+                    = 1.5rem), so the segment runs top-4 → -bottom-10,
+                    centred in the node column after the date + grid gap. */}
+                {i < resume.education.length - 1 && (
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute top-4 -bottom-10 left-[calc(5.4rem+0.75rem)] flex w-7 justify-center sm:left-[calc(6.4rem+1rem)]"
+                  >
+                    <motion.span
+                      className="h-full w-[2px] origin-top rounded"
+                      style={{ background: "var(--node-edu)" }}
+                      initial={{ scaleY: 0 }}
+                      animate={show ? { scaleY: 1 } : { scaleY: 0 }}
+                      transition={{
+                        duration: reduce ? 0.001 : 0.9,
+                        ease: SILK,
+                        delay: reduce ? 0 : 0.2 + i * 0.12,
+                      }}
+                    />
+                  </span>
+                )}
+
                 <span className="pt-1 text-right text-[0.8125rem] font-extrabold text-[#1f2740] dark:text-[var(--body)]">
                   {ed.period}
                 </span>

@@ -8,11 +8,6 @@
 
 import type { ComponentType } from "react";
 import {
-  GraduationCap,
-  Briefcase,
-  type LucideIcon,
-} from "lucide-react";
-import {
   GitHubIcon,
   GmailIcon,
   LinkedInIcon,
@@ -140,34 +135,54 @@ export const resume: ResumeData = {
 
   skills: [
     {
-      label: "PHP, NodeJS",
-      level: 85,
-      badge: { bg: "#6b7fc0", fg: "#ffffff", glyph: "php" },
-    },
-    {
       label: "Angular",
+      level: 85,
+      badge: { bg: "#dd0031", fg: "#ffffff", glyph: "Ng" },
+    },
+    {
+      label: "React",
+      level: 80,
+      badge: { bg: "#61dafb", fg: "#0b1e2d", glyph: "Re" },
+    },
+    {
+      label: "Next.js",
+      level: 75,
+      badge: { bg: "#171717", fg: "#ffffff", glyph: "Nx" },
+    },
+    {
+      label: "SQL Server",
+      level: 82,
+      badge: { bg: "#a91d22", fg: "#ffffff", glyph: "SQL" },
+    },
+    {
+      label: "Go",
+      level: 65,
+      badge: { bg: "#00add8", fg: "#ffffff", glyph: "Go" },
+    },
+    {
+      label: "Python",
       level: 70,
-      badge: { bg: "#f7df1e", fg: "#1a1a1a", glyph: "JS" },
+      badge: { bg: "#3776ab", fg: "#ffffff", glyph: "Py" },
     },
     {
-      label: "HTML, CSS",
-      level: 88,
-      badge: { bg: "#e45126", fg: "#ffffff", glyph: "</>" },
-    },
-    {
-      label: "MySQL, SQLite, MongoDB",
+      label: "AWS",
       level: 55,
-      badge: { bg: "#3a6f9e", fg: "#ffffff", glyph: "DB" },
+      badge: { bg: "#232f3e", fg: "#ffffff", glyph: "AWS" },
     },
     {
-      label: "Git, Github",
-      level: 78,
-      badge: { bg: "#f05133", fg: "#ffffff", glyph: "git" },
+      label: "Docker",
+      level: 70,
+      badge: { bg: "#2496ed", fg: "#ffffff", glyph: "Dk" },
     },
     {
-      label: "Graphic Design, Photoshop",
-      level: 50,
-      badge: { bg: "#26a65b", fg: "#ffffff", glyph: "Ps" },
+      label: "Podman",
+      level: 60,
+      badge: { bg: "#892ca0", fg: "#ffffff", glyph: "Pm" },
+    },
+    {
+      label: "Linux",
+      level: 72,
+      badge: { bg: "#f5c518", fg: "#1a1a1a", glyph: "Lx" },
     },
   ],
 
@@ -254,23 +269,4 @@ export const resume: ResumeData = {
   ],
 
   updatedOn: "updated on aug 2025",
-};
-
-/* -------------------------------------------------------------------------- */
-/*  Section anchors for the sticky nav                                         */
-/* -------------------------------------------------------------------------- */
-
-export const sections = [
-  { id: "skills", label: "Skills" },
-  { id: "experience", label: "Experience" },
-  { id: "education", label: "Education" },
-  { id: "languages", label: "Languages" },
-] as const;
-
-export type SectionId = (typeof sections)[number]["id"];
-
-/** Icons reused by section headings / timelines. */
-export const timelineIcons = {
-  education: GraduationCap as LucideIcon,
-  experience: Briefcase as LucideIcon,
 };

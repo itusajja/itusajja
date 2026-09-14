@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* class-based dark mode (driven by next-themes) */
+/* class-based dark mode (driven by the custom ThemeProvider) */
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* -------------------------------------------------------------------------- */
@@ -105,7 +105,6 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 5.5rem;
   -webkit-text-size-adjust: 100%;
 }
 
@@ -153,12 +152,34 @@ body {
   border-radius: 4px;
 }
 
+/* Links stay underline-free in every state. Belt-and-braces on top of the
+   preflight `text-decoration: inherit` — some browsers/extensions re-apply an
+   underline on hover, which we never want in this design. */
+a,
+a:hover,
+a:focus,
+a:active,
+a:visited {
+  text-decoration: none;
+  text-decoration-line: none;
+}
+
 /* -------------------------------------------------------------------------- */
 /*  Components / utilities                                                     */
 /* -------------------------------------------------------------------------- */
 
 .text-balance {
   text-wrap: balance;
+}
+
+/* small mono kicker used on the splash screen ("Online Résumé") */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
 
 /* serif section headings, matching the source document's titles */
