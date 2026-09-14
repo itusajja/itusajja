@@ -1,80 +1,69 @@
 "use client";
 
+import { motion, useInView, useReducedMotion } from "framer-motion";
+import { useRef } from "react";
 import { GraduationCap } from "lucide-react";
 import { resume } from "@/data/resume";
+import { SectionTitle } from "../SectionTitle";
 import { RevealGroup, RevealItem } from "../Reveal";
-import { SectionHeading } from "../SectionHeading";
-import { Ph } from "../Ph";
+import { useSplashReady } from "../SplashScreen";
 
-/** Education history. */
+const SILK = [0.22, 1, 0.36, 1] as const;
+
+/** Education history — date · blue graduation-cap node · title + subtitle. */
 export function Education() {
+  const reduce = useReducedMotion();
+  const ready = useSplashReady();
+  const ref = useRef<HTMLOListElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const show = ready && inView;
+
   return (
     <section id="education" className="scroll-mt-24">
-      <SectionHeading
-        eyebrow="Academic"
-        title="Education"
-        icon={GraduationCap}
-      />
+      <SectionTitle>Education History</SectionTitle>
 
-      <RevealGroup gap={0.12} className="space-y-4">
-        {resume.education.map((ed, i) => (
-          <RevealItem key={`${ed.school}-${i}`} direction="up" distance={20}>
-            <article className="card group relative overflow-hidden px-5 py-4.5 sm:px-6 sm:py-5">
-              <GraduationCap
-                className="pointer-events-none absolute -right-3 -bottom-4 h-24 w-24 text-[var(--line)] opacity-70 transition-all duration-700 group-hover:scale-110 group-hover:text-[var(--accent-soft)]"
-                strokeWidth={1}
-                aria-hidden="true"
-              />
+      <ol ref={ref} className="relative mt-6 space-y-6">
+        {/* connecting spine through the nodes */}
+        <motion.span
+          className="absolute top-2 bottom-2 left-[6.4rem] w-[2px] origin-top rounded sm:left-[7.4rem]"
+          style={{ background: "var(--node-edu)" }}
+          initial={{ scaleY: 0 }}
+          animate={show ? { scaleY: 1 } : { scaleY: 0 }}
+          transition={{ duration: reduce ? 0.001 : 1.3, ease: SILK }}
+          aria-hidden="true"
+        />
 
-              <div className="relative">
-                <span className="chip font-mono text-[0.6875rem]">
-                  <Ph text={`${ed.start} — ${ed.end}`} />
+        <RevealGroup gap={0.12}>
+          {resume.education.map((ed, i) => (
+            <RevealItem key={ed.title} direction="right" distance={20}>
+              <li className="grid grid-cols-[5.4rem_auto_1fr] items-start gap-x-3 sm:grid-cols-[6.4rem_auto_1fr] sm:gap-x-4">
+                <span className="pt-1 text-right text-[0.8125rem] font-extrabold text-[#1f2740] dark:text-[var(--body)]">
+                  {ed.period}
                 </span>
 
-                <h3 className="font-display mt-2.5 text-base font-semibold tracking-tight text-[var(--ink)]">
-                  <Ph text={ed.degree} />
-                </h3>
+                <motion.span
+                  className="badge-circle relative z-10 mt-0.5 h-7 w-7 bg-[var(--node-edu)] text-white"
+                  initial={reduce ? { opacity: 0 } : { scale: 0, opacity: 0 }}
+                  animate={show ? { scale: 1, opacity: 1 } : reduce ? { opacity: 0 } : { scale: 0, opacity: 0 }}
+                  transition={{ duration: reduce ? 0.001 : 0.55, ease: SILK, delay: reduce ? 0 : 0.2 + i * 0.12 }}
+                  aria-hidden="true"
+                >
+                  <GraduationCap className="h-4 w-4" strokeWidth={2.2} />
+                </motion.span>
 
-                <p className="mt-1 text-[0.8125rem] font-medium text-[var(--accent)]">
-                  <Ph text={ed.school} />
-                  {ed.location && (
-                    <span className="font-normal text-[var(--faint)]">
-                      {" "}
-                      · <Ph text={ed.location} />
-                    </span>
-                  )}
-                </p>
-
-                {ed.grade && (
-                  <p className="mt-2 text-[0.8125rem] text-[var(--muted)]">
-                    <span className="text-[var(--faint)]">Grade: </span>
-                    <Ph text={ed.grade} />
+                <div className="min-w-0">
+                  <p className="text-[0.9375rem] leading-snug font-bold tracking-wide text-[#1f2740] dark:text-[var(--body)]">
+                    {ed.title}
                   </p>
-                )}
-
-                {ed.details && ed.details.length > 0 && (
-                  <ul className="mt-2.5 space-y-1.5">
-                    {ed.details.map((d, di) => (
-                      <li
-                        key={di}
-                        className="flex gap-2.5 text-[0.8125rem] leading-[1.7] text-[var(--muted)]"
-                      >
-                        <span
-                          className="mt-[0.65em] h-1 w-1 shrink-0 rounded-full bg-[var(--accent)] transition-all duration-300 group-hover:w-2.5"
-                          aria-hidden="true"
-                        />
-                        <span>
-                          <Ph text={d} />
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            </article>
-          </RevealItem>
-        ))}
-      </RevealGroup>
+                  <p className="mt-0.5 text-[0.8125rem] font-medium text-[var(--blue)]">
+                    {ed.subtitle}
+                  </p>
+                </div>
+              </li>
+            </RevealItem>
+          ))}
+        </RevealGroup>
+      </ol>
     </section>
   );
 }

@@ -14,31 +14,30 @@ import { resume } from "@/data/resume";
 
 export const metadata: Metadata = {
   title: `${resume.name} — Résumé`,
-  description: resume.tagline.replace(/[[\]]/g, ""),
+  description: `${resume.headline}. ${resume.intro[0]}`,
   applicationName: `${resume.name} — Résumé`,
   authors: [{ name: resume.name }],
   creator: resume.name,
   keywords: [
     resume.name,
+    resume.headline,
     "résumé",
     "resume",
     "CV",
-    "portfolio",
-    ...resume.skills.flatMap((g) => [
-      ...(g.items ?? []),
-      ...(g.rated?.map((r) => r.name) ?? []),
-    ]),
-  ].filter((k) => !k.startsWith("[")),
+    "fullstack developer",
+    "graphic designer",
+    ...resume.skills.map((s) => s.label),
+  ],
   openGraph: {
     title: `${resume.name} — Résumé`,
-    description: resume.tagline.replace(/[[\]]/g, ""),
+    description: `${resume.headline}. ${resume.intro[0]}`,
     type: "profile",
     siteName: `${resume.name} — Résumé`,
   },
   twitter: {
     card: "summary",
     title: `${resume.name} — Résumé`,
-    description: resume.tagline.replace(/[[\]]/g, ""),
+    description: `${resume.headline}. ${resume.intro[0]}`,
   },
   icons: { icon: "/favicon.ico" },
 };

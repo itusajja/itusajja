@@ -25,8 +25,8 @@ export function ThemeToggle({ compact = false }: { compact?: boolean }) {
       onClick={() => setTheme(isDark ? "light" : "dark")}
       className={
         compact
-          ? "grid h-9 w-9 place-items-center rounded-full border border-[var(--line)] bg-[var(--paper-raised)] text-[var(--muted)] transition-colors duration-300 hover:border-[var(--accent)] hover:text-[var(--accent)]"
-          : "group relative grid h-10 w-10 place-items-center overflow-hidden rounded-full border border-[var(--line)] bg-[var(--paper-raised)] text-[var(--muted)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--accent)] hover:text-[var(--accent)]"
+          ? "grid h-9 w-9 place-items-center rounded-full border border-[var(--line)] bg-[var(--paper)] text-[var(--muted)] transition-colors duration-300 hover:border-[var(--blue)] hover:text-[var(--blue)]"
+          : "group relative grid h-10 w-10 place-items-center overflow-hidden rounded-full border border-[var(--line)] bg-[var(--paper)] text-[var(--muted)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--blue)] hover:text-[var(--blue)]"
       }
     >
       {/* always render both so SSR markup matches the client */}

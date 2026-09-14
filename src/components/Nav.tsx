@@ -1,21 +1,16 @@
 "use client";
 
-import {
-  motion,
-  useScroll,
-  useSpring,
-  useReducedMotion,
-} from "framer-motion";
+import { motion, useScroll, useSpring, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { resume, sections } from "@/data/resume";
 import { cn } from "@/lib/cn";
 import { useScrolled } from "@/lib/useScrolled";
 import { ThemeToggle } from "./ThemeToggle";
+import { LogoMark } from "./icons";
 
 /**
- * Sticky top bar: monogram, section anchors with a sliding active pill,
- * theme toggle, and a hairline scroll-progress indicator.
- * Fades in only after the splash screen has cleared.
+ * Sticky top bar in the document's palette: mini logo + name, section anchors
+ * with a sliding active pill, theme toggle, and a scroll-progress hairline.
  */
 export function Nav({ ready }: { ready: boolean }) {
   const reduce = useReducedMotion();
@@ -54,10 +49,7 @@ export function Nav({ ready }: { ready: boolean }) {
     const el = document.getElementById(id);
     if (!el) return;
     const top = el.getBoundingClientRect().top + window.scrollY - 96;
-    window.scrollTo({
-      top,
-      behavior: reduce ? "auto" : "smooth",
-    });
+    window.scrollTo({ top, behavior: reduce ? "auto" : "smooth" });
     setActive(id);
   };
 
@@ -66,28 +58,22 @@ export function Nav({ ready }: { ready: boolean }) {
       className={cn(
         "no-print fixed inset-x-0 top-0 z-50 transition-colors duration-500",
         solid
-          ? "border-b border-[var(--line)] bg-[var(--nav-bg)] backdrop-blur-xl"
+          ? "nav-blur border-b border-[var(--line)] bg-[var(--nav-bg)]"
           : "border-b border-transparent bg-transparent",
       )}
       initial={{ y: -72, opacity: 0 }}
       animate={ready ? { y: 0, opacity: 1 } : { y: -72, opacity: 0 }}
       transition={{ duration: reduce ? 0.001 : 0.8, ease: [0.22, 1, 0.36, 1] }}
-      style={{
-        // next-themes writes the class on <html>, so read the CSS var directly
-        WebkitBackdropFilter: solid ? "blur(16px)" : undefined,
-      }}
     >
-      <div className="mx-auto flex h-16 w-full max-w-6xl items-center gap-4 px-5 sm:px-8">
+      <div className="mx-auto flex h-16 w-full max-w-5xl items-center gap-4 px-5 sm:px-8">
         <a
           href="#top"
           onClick={go("top")}
           className="group flex items-center gap-2.5"
           aria-label={`${resume.name} — back to top`}
         >
-          <span className="pulse-ring grid h-8 w-8 place-items-center rounded-lg bg-[var(--accent)] font-display text-[0.7rem] font-bold text-[var(--accent-ink)] transition-transform duration-300 group-hover:scale-105">
-            {resume.initials}
-          </span>
-          <span className="hidden font-display text-sm font-semibold tracking-tight text-[var(--ink)] sm:block">
+          <LogoMark className="h-8 w-8 transition-transform duration-300 group-hover:scale-105 group-hover:rotate-6" />
+          <span className="hidden font-display text-sm font-extrabold tracking-tight text-[var(--ink)] sm:block">
             {resume.name}
           </span>
         </a>
@@ -101,21 +87,21 @@ export function Nav({ ready }: { ready: boolean }) {
                 href={`#${s.id}`}
                 onClick={go(s.id)}
                 className={cn(
-                  "relative rounded-full px-3.5 py-1.5 text-[0.8125rem] font-medium transition-colors duration-300",
+                  "relative rounded-full px-3.5 py-1.5 text-[0.8125rem] font-semibold transition-colors duration-300",
                   isActive
-                    ? "text-[var(--accent)]"
+                    ? "text-[var(--orange)]"
                     : "text-[var(--muted)] hover:text-[var(--ink)]",
                 )}
               >
                 {isActive && (
                   <motion.span
                     layoutId="nav-pill"
-                    className="absolute inset-0 rounded-full bg-[var(--accent-soft)]"
-                    transition={{
-                      type: "spring",
-                      stiffness: 420,
-                      damping: 34,
+                    className="absolute inset-0 rounded-full"
+                    style={{
+                      background:
+                        "color-mix(in srgb, var(--orange) 16%, transparent)",
                     }}
+                    transition={{ type: "spring", stiffness: 420, damping: 34 }}
                   />
                 )}
                 <span className="relative z-10">{s.label}</span>
@@ -124,7 +110,7 @@ export function Nav({ ready }: { ready: boolean }) {
           })}
         </nav>
 
-        <div className={cn("flex items-center gap-2", !ready && "invisible")}>
+        <div className={cn("ml-auto flex items-center gap-2 lg:ml-0", !ready && "invisible")}>
           <ThemeToggle />
         </div>
       </div>

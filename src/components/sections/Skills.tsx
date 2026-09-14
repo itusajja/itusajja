@@ -2,100 +2,69 @@
 
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import { useRef } from "react";
-import { Wrench } from "lucide-react";
-import { resume, type SkillGroup } from "@/data/resume";
-import { Reveal, RevealGroup, RevealItem } from "../Reveal";
-import { SectionHeading } from "../SectionHeading";
-import { Ph } from "../Ph";
+import { resume, type SkillItem } from "@/data/resume";
+import { SectionTitle } from "../SectionTitle";
+import { RevealGroup, RevealItem } from "../Reveal";
 import { useSplashReady } from "../SplashScreen";
 
 const SILK = [0.22, 1, 0.36, 1] as const;
 
-/** Skills — rated groups get animated meters, plain groups get tag clouds. */
+/** Skills — circular brand badge + label + animated proficiency bar. */
 export function Skills() {
   return (
     <section id="skills" className="scroll-mt-24">
-      <SectionHeading eyebrow="Toolkit" title="Skills" icon={Wrench} />
+      <SectionTitle>Skills</SectionTitle>
 
-      <div className="space-y-7">
-        {resume.skills.map((group, i) => (
-          <Reveal key={group.title} delay={i * 0.08} distance={18}>
-            <SkillBlock group={group} index={i} />
-          </Reveal>
+      <RevealGroup gap={0.09} className="mt-6 space-y-5">
+        {resume.skills.map((s, i) => (
+          <RevealItem key={s.label} direction="right" distance={20}>
+            <SkillRow skill={s} index={i} />
+          </RevealItem>
         ))}
-      </div>
+      </RevealGroup>
     </section>
   );
 }
 
-function SkillBlock({ group, index }: { group: SkillGroup; index: number }) {
+function SkillRow({ skill, index }: { skill: SkillItem; index: number }) {
   const reduce = useReducedMotion();
   const ready = useSplashReady();
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-50px" });
+  const inView = useInView(ref, { once: true, margin: "-40px" });
   const show = ready && inView;
 
   return (
-    <div ref={ref}>
-      <h3 className="mb-3 flex items-center gap-2.5 text-[0.6875rem] font-semibold tracking-[0.15em] text-[var(--faint)] uppercase">
-        <span
-          className="accent-bar h-2.5 w-0.5 rounded-full"
-          aria-hidden="true"
-        />
-        <Ph text={group.title} />
-      </h3>
+    <div ref={ref} className="flex items-center gap-3.5">
+      <motion.span
+        className="badge-circle h-9 w-9 text-[0.6875rem] font-bold"
+        style={{ background: skill.badge.bg, color: skill.badge.fg }}
+        initial={reduce ? { opacity: 0 } : { scale: 0.3, rotate: -18, opacity: 0 }}
+        animate={show ? { scale: 1, rotate: 0, opacity: 1 } : reduce ? { opacity: 0 } : { scale: 0.3, rotate: -18, opacity: 0 }}
+        transition={{ duration: reduce ? 0.001 : 0.6, ease: SILK, delay: reduce ? 0 : index * 0.07 }}
+        aria-hidden="true"
+      >
+        {skill.badge.glyph}
+      </motion.span>
 
-      {group.rated && group.rated.length > 0 && (
-        <div className="space-y-3">
-          {group.rated.map((skill, i) => (
-            <div key={`${index}-${i}`}>
-              <div className="mb-1.5 flex items-baseline justify-between gap-3">
-                <span className="text-[0.8125rem] font-medium text-[var(--ink)]">
-                  <Ph text={skill.name} />
-                </span>
-                <span className="font-mono text-[0.625rem] text-[var(--faint)]">
-                  {skill.level}%
-                </span>
-              </div>
-              <div className="relative h-1.5 overflow-hidden rounded-full bg-[var(--line)]">
-                <motion.div
-                  className="absolute inset-y-0 left-0 rounded-full bg-[var(--accent)]"
-                  initial={{ width: 0 }}
-                  animate={show ? { width: `${skill.level}%` } : { width: 0 }}
-                  transition={{
-                    duration: reduce ? 0.001 : 1.1,
-                    ease: SILK,
-                    delay: reduce ? 0 : i * 0.1,
-                  }}
-                />
-                <motion.div
-                  className="absolute inset-y-0 left-0 rounded-full opacity-45 blur-[3px]"
-                  style={{ background: "var(--accent)" }}
-                  initial={{ width: 0 }}
-                  animate={show ? { width: `${skill.level}%` } : { width: 0 }}
-                  transition={{
-                    duration: reduce ? 0.001 : 1.25,
-                    ease: SILK,
-                    delay: reduce ? 0 : i * 0.1,
-                  }}
-                />
-              </div>
-            </div>
-          ))}
+      <div className="min-w-0 flex-1">
+        <p className="text-[0.8125rem] font-semibold text-[#1f2740] dark:text-[var(--body)]">
+          {skill.label}
+        </p>
+        <div className="mt-1.5 h-[7px] w-full max-w-[13rem] overflow-hidden rounded-full bg-[var(--track)] shadow-[inset_0_1px_2px_rgba(0,0,0,.08)]">
+          <motion.div
+            className="blue-bar h-full rounded-full"
+            initial={{ width: 0 }}
+            animate={show ? { width: `${skill.level}%` } : { width: 0 }}
+            transition={{
+              duration: reduce ? 0.001 : 1.05,
+              ease: SILK,
+              delay: reduce ? 0 : index * 0.07 + 0.15,
+            }}
+          />
         </div>
-      )}
+      </div>
 
-      {group.items && group.items.length > 0 && (
-        <RevealGroup gap={0.05} className="flex flex-wrap gap-1.5">
-          {group.items.map((item, i) => (
-            <RevealItem key={`${index}-${i}`} direction="up" distance={10}>
-              <span className="chip cursor-default font-mono text-[0.6875rem]">
-                <Ph text={item} />
-              </span>
-            </RevealItem>
-          ))}
-        </RevealGroup>
-      )}
+      <span className="sr-only">{`${skill.label}: ${skill.level} out of 100`}</span>
     </div>
   );
 }

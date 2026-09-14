@@ -1,25 +1,19 @@
 "use client";
 
+import { Clock } from "lucide-react";
 import { resume } from "@/data/resume";
 import { Reveal } from "./Reveal";
-import { Ph } from "./Ph";
 
-/** Closing line of the document. */
+/** The small dark "updated on …" pill from the bottom-right of the document. */
 export function Footer() {
-  const year = new Date().getFullYear();
-
   return (
-    <footer className="border-t border-[var(--line)] px-6 py-7 sm:px-12 lg:px-14">
-      <Reveal distance={14}>
-        <div className="flex flex-col items-center gap-3 text-center">
-          <span className="hairline w-24" aria-hidden="true" />
-          <p className="text-[0.6875rem] tracking-[0.16em] text-[var(--faint)] uppercase">
-            References available upon request
-          </p>
-          <p className="text-[0.6875rem] text-[var(--faint)]">
-            <Ph text={resume.name} /> · <Ph text={resume.location} /> · ©{" "}
-            {year}
-          </p>
+    <footer className="px-5 pb-8 sm:px-10">
+      <Reveal direction="left" distance={16}>
+        <div className="mx-auto flex max-w-5xl justify-end">
+          <span className="inline-flex items-center gap-2 rounded-md bg-[#232a3d] px-3 py-1.5 text-[0.6875rem] font-medium text-white/90 shadow-[0_6px_16px_-8px_rgba(0,0,0,.6)] dark:bg-[var(--surface)]">
+            <Clock className="h-3 w-3" strokeWidth={2} />
+            {resume.updatedOn}
+          </span>
         </div>
       </Reveal>
     </footer>

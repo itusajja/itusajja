@@ -161,7 +161,7 @@ function SplashScreen({
             <div className="pointer-events-none absolute inset-0">
               <motion.div
                 className="float-slow absolute -top-40 -left-32 h-[34rem] w-[34rem] rounded-full blur-[110px]"
-                style={{ background: "var(--accent-ring)" }}
+                style={{ background: "color-mix(in srgb, var(--orange) 16%, transparent)" }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1.4 }}
@@ -169,7 +169,7 @@ function SplashScreen({
               <motion.div
                 className="float-slow absolute -right-40 -bottom-48 h-[30rem] w-[30rem] rounded-full blur-[120px]"
                 style={{
-                  background: "color-mix(in srgb, var(--accent) 12%, transparent)",
+                  background: "color-mix(in srgb, var(--blue) 14%, transparent)",
                   animationDelay: "-4.5s",
                 }}
                 initial={{ opacity: 0 }}
@@ -246,7 +246,7 @@ function SplashScreen({
                     cy="50"
                     r="46"
                     fill="none"
-                    stroke="var(--accent)"
+                    stroke="var(--orange)"
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeDasharray={ringLength}
@@ -317,11 +317,11 @@ function SplashScreen({
               >
                 <div className="relative h-[3px] w-full overflow-hidden rounded-full bg-[var(--line)]">
                   <motion.div
-                    className="sheen absolute inset-y-0 left-0 overflow-hidden rounded-full bg-[var(--accent)]"
+                    className="sheen absolute inset-y-0 left-0 overflow-hidden rounded-full bg-[var(--blue)]"
                     style={{ width: barWidth }}
                   />
                 </div>
-                <div className="mt-3 flex items-center justify-between font-mono text-[0.625rem] tracking-[0.14em] text-[var(--faint)] uppercase">
+                <div className="mt-3 flex items-center justify-between font-mono text-[0.625rem] tracking-[0.14em] text-[var(--muted)] uppercase">
                   <motion.span
                     key={status}
                     initial={{ opacity: 0, y: 4 }}

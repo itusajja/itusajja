@@ -1,44 +1,37 @@
-import { PendingNotice } from "@/components/PendingNotice";
 import { Footer } from "@/components/Footer";
 import { Hero } from "@/components/sections/Hero";
-import { About } from "@/components/sections/About";
-import { Experience } from "@/components/sections/Experience";
-import { Projects } from "@/components/sections/Projects";
 import { Skills } from "@/components/sections/Skills";
+import { Languages } from "@/components/sections/Languages";
 import { Education } from "@/components/sections/Education";
-import { Credentials } from "@/components/sections/Credentials";
+import { Experience } from "@/components/sections/Experience";
 
 /**
- * The résumé, rendered as a single "sheet" that mirrors the PDF page:
- * header block across the top, then a two-column body — main column first in
- * the DOM (so it leads on mobile), sidebar pulled to the left on desktop.
+ * The résumé, mirroring the source document's arrangement:
+ * full-width header block, then a two-column body —
+ *   left  : Skills · Languages · Education History
+ *   right : Work Experience
+ * On mobile the experience column leads (order-1), then the left column.
  */
 export default function Home() {
   return (
-    <div className="px-4 pt-24 pb-16 sm:px-6 sm:pt-28 sm:pb-20">
-      <PendingNotice />
+    <div className="pt-20">
+      <Hero />
 
-      <div className="sheet mx-auto w-full max-w-5xl overflow-hidden rounded-2xl">
-        <Hero />
-
-        <div className="grid lg:grid-cols-12">
-          {/* main column */}
-          <div className="order-1 space-y-13 px-6 py-10 sm:px-10 lg:order-2 lg:col-span-8 lg:px-12 lg:py-12">
-            <About />
-            <Experience />
-            <Projects />
-          </div>
-
-          {/* sidebar */}
-          <aside className="order-2 space-y-10 border-t border-[var(--line)] bg-[var(--paper-raised)]/45 px-6 py-10 sm:px-8 lg:order-1 lg:col-span-4 lg:border-t-0 lg:border-r lg:py-12">
-            <Skills />
-            <Education />
-            <Credentials />
-          </aside>
+      <div className="mx-auto grid w-full max-w-5xl gap-x-12 gap-y-12 px-5 pb-6 sm:px-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-x-16">
+        {/* left column */}
+        <div className="order-2 space-y-11 lg:order-1">
+          <Skills />
+          <Languages />
+          <Education />
         </div>
 
-        <Footer />
+        {/* right column */}
+        <div className="order-1 space-y-11 lg:order-2">
+          <Experience />
+        </div>
       </div>
+
+      <Footer />
     </div>
   );
 }

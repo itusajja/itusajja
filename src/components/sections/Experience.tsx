@@ -4,155 +4,85 @@ import { motion, useInView, useReducedMotion } from "framer-motion";
 import { useRef } from "react";
 import { Briefcase } from "lucide-react";
 import { resume } from "@/data/resume";
+import { SectionTitle } from "../SectionTitle";
 import { Reveal, RevealGroup, RevealItem } from "../Reveal";
-import { SectionHeading } from "../SectionHeading";
-import { Ph } from "../Ph";
 import { useSplashReady } from "../SplashScreen";
 
 const SILK = [0.22, 1, 0.36, 1] as const;
 
-/** Work history rendered as a self-drawing timeline. */
+/**
+ * Work Experience — the right column of the document.
+ * date · navy briefcase node on a navy spine · company + role + bullet box.
+ */
 export function Experience() {
   const reduce = useReducedMotion();
   const ready = useSplashReady();
   const ref = useRef<HTMLOListElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const inView = useInView(ref, { once: true, margin: "-70px" });
   const show = ready && inView;
 
   return (
     <section id="experience" className="scroll-mt-24">
-      <SectionHeading
-        eyebrow="Career"
-        title="Work Experience"
-        icon={Briefcase}
-        aside={
-          <span className="font-mono tracking-wider">
-            {resume.experience.length} roles
-          </span>
-        }
-      />
+      <SectionTitle center className="block text-center">
+        Work Experience
+      </SectionTitle>
 
-      <ol ref={ref} className="relative pl-7 sm:pl-9">
-        {/* spine */}
-        <span
-          className="absolute top-1.5 bottom-1.5 left-[7px] w-px bg-[var(--line)] sm:left-[9px]"
-          aria-hidden="true"
-        />
+      <ol ref={ref} className="relative mt-8 space-y-9">
+        {/* navy spine through the briefcase nodes */}
         <motion.span
-          className="absolute top-1.5 bottom-1.5 left-[7px] w-px origin-top bg-[var(--line-strong)] sm:left-[9px]"
-          aria-hidden="true"
+          className="timeline-line absolute top-2 bottom-2 left-[6.6rem] w-[2.5px] origin-top rounded sm:left-[7.6rem]"
           initial={{ scaleY: 0 }}
           animate={show ? { scaleY: 1 } : { scaleY: 0 }}
-          transition={{ duration: reduce ? 0.001 : 1.5, ease: SILK }}
-        />
-        <motion.span
-          className="accent-bar absolute top-1.5 left-[7px] w-px origin-top sm:left-[9px]"
+          transition={{ duration: reduce ? 0.001 : 1.6, ease: SILK }}
           aria-hidden="true"
-          initial={{ scaleY: 0 }}
-          animate={show ? { scaleY: 1 } : { scaleY: 0 }}
-          transition={{
-            duration: reduce ? 0.001 : 1.7,
-            ease: SILK,
-            delay: reduce ? 0 : 0.18,
-          }}
-          style={{ height: "70%" }}
         />
 
-        <RevealGroup gap={0.14}>
+        <RevealGroup gap={0.13}>
           {resume.experience.map((job, i) => (
-            <RevealItem key={`${job.company}-${i}`} direction="up" distance={24}>
-              <li className="relative pb-9 last:pb-0">
-                {/* node */}
+            <RevealItem key={`${job.company}-${i}`} direction="left" distance={22}>
+              <li className="grid grid-cols-[5.6rem_auto_1fr] items-start gap-x-3 sm:grid-cols-[6.6rem_auto_1fr] sm:gap-x-4">
+                <span className="pt-1 text-right text-[0.8125rem] font-extrabold text-[#1f2740] dark:text-[var(--body)]">
+                  {job.period}
+                </span>
+
                 <motion.span
-                  className="absolute top-1.5 -left-7 grid h-[15px] w-[15px] place-items-center rounded-full border-2 border-[var(--accent)] bg-[var(--paper)] sm:-left-9"
-                  aria-hidden="true"
+                  className="badge-circle relative z-10 mt-0.5 h-8 w-8 bg-[var(--node)] text-white shadow-[0_4px_12px_-4px_rgba(27,44,144,.7)]"
                   initial={reduce ? { opacity: 0 } : { scale: 0, opacity: 0 }}
-                  animate={show ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
-                  transition={{
-                    duration: reduce ? 0.001 : 0.55,
-                    ease: SILK,
-                    delay: reduce ? 0 : 0.25 + i * 0.14,
-                  }}
+                  animate={show ? { scale: 1, opacity: 1 } : reduce ? { opacity: 0 } : { scale: 0, opacity: 0 }}
+                  transition={{ duration: reduce ? 0.001 : 0.55, ease: SILK, delay: reduce ? 0 : 0.25 + i * 0.13 }}
+                  aria-hidden="true"
                 >
-                  {job.current && (
-                    <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" />
-                  )}
+                  <Briefcase className="h-4 w-4" strokeWidth={2.2} />
                 </motion.span>
 
-                <article className="card group px-5 py-4.5 sm:px-6 sm:py-5">
-                  <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1.5">
-                    <h3 className="font-display text-base font-semibold tracking-tight text-[var(--ink)] sm:text-[1.0625rem]">
-                      <Ph text={job.role} />
-                    </h3>
-                    <span className="chip shrink-0 font-mono text-[0.6875rem] tracking-wide">
-                      <Ph text={`${job.start} — ${job.end}`} />
-                      {job.current && (
-                        <span className="ml-1 h-1.5 w-1.5 rounded-full bg-[var(--accent)]" />
-                      )}
-                    </span>
-                  </div>
+                <div className="min-w-0">
+                  <h3 className="text-[1.0625rem] leading-snug font-bold tracking-wide text-[var(--blue)]">
+                    {job.company}
+                  </h3>
+                  <p className="mt-0.5 text-[0.875rem] font-semibold text-[#1f2740] dark:text-[var(--body)]">
+                    {job.role}
+                  </p>
 
-                  <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.8125rem]">
-                    <span className="font-medium text-[var(--accent)]">
-                      <Ph text={job.company} />
-                    </span>
-                    {job.location && (
-                      <>
-                        <span className="text-[var(--line-strong)]">•</span>
-                        <span className="text-[var(--faint)]">
-                          <Ph text={job.location} />
-                        </span>
-                      </>
-                    )}
-                  </div>
-
-                  {job.summary && (
-                    <p className="mt-3 text-[0.875rem] leading-relaxed text-[var(--muted)] italic">
-                      <Ph text={job.summary} />
-                    </p>
-                  )}
-
-                  <ul className="mt-3.5 space-y-2">
-                    {job.bullets.map((b, bi) => (
-                      <li
-                        key={bi}
-                        className="flex gap-2.5 text-[0.875rem] leading-[1.7] text-[var(--muted)]"
-                      >
-                        <span
-                          className="mt-[0.6em] h-1 w-1 shrink-0 rounded-full bg-[var(--accent)] transition-all duration-300 group-hover:w-2.5"
-                          aria-hidden="true"
-                        />
-                        <span>
-                          <Ph text={b} />
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  {job.stack && job.stack.length > 0 && (
-                    <div className="mt-4 flex flex-wrap gap-1.5 border-t border-[var(--line)] pt-3.5">
-                      {job.stack.map((s, si) => (
-                        <span
-                          key={si}
-                          className="rounded-md bg-[var(--paper-raised)] px-2 py-0.5 font-mono text-[0.6875rem] text-[var(--faint)] ring-1 ring-[var(--line)] ring-inset transition-colors duration-300 group-hover:text-[var(--muted)]"
-                        >
-                          <Ph text={s} />
-                        </span>
-                      ))}
+                  <Reveal delay={0.12} distance={14} className="mt-3">
+                    <div className="box-soft px-4 py-3">
+                      <ul className="space-y-1.5">
+                        {job.bullets.map((b, bi) => (
+                          <li
+                            key={bi}
+                            className="text-[0.8125rem] leading-relaxed text-[#2a3350] italic dark:text-[var(--body)]"
+                          >
+                            - {b}
+                          </li>
+                        ))}
+                      </ul>
                     </div>
-                  )}
-                </article>
+                  </Reveal>
+                </div>
               </li>
             </RevealItem>
           ))}
         </RevealGroup>
       </ol>
-
-      <Reveal delay={0.2} distance={10} className="mt-8">
-        <p className="text-center text-[0.6875rem] tracking-[0.14em] text-[var(--faint)] uppercase">
-          Earlier roles available on request
-        </p>
-      </Reveal>
     </section>
   );
 }
