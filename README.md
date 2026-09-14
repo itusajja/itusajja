@@ -35,7 +35,7 @@ Drop the photo at `public/avatar.jpg` and set `photo: "/avatar.jpg"` in
 | Language  | TypeScript (strict)                                |
 | Styling   | Tailwind CSS v4 + CSS custom properties            |
 | Animation | Framer Motion 13                                   |
-| Theming   | next-themes (class strategy)                       |
+| Theming   | Custom ThemeProvider (class strategy, FOUC-free)   |
 | Icons     | lucide-react + hand-drawn brand/flag/logo marks    |
 | Fonts     | Self-hosted variable fonts (Inter, Sora, JetBrains Mono) |
 
@@ -76,7 +76,6 @@ curtains open. `src/components/Reveal.tsx` combines it with `useInView`.
 
 One typed object drives the page: contacts, greeting, intro, skills (with bar
 levels), languages, education, experience, availability and footer text.
-`sections` at the bottom controls the sticky-nav order.
 
 ### Theming
 
@@ -102,8 +101,7 @@ src/
 │   └── globals.css       design tokens, base, utilities, print
 ├── components/
 │   ├── SplashScreen.tsx  intro + ready-gate provider
-│   ├── Shell.tsx         nav + gated document entrance
-│   ├── Nav.tsx           sticky bar, scroll progress, active pill
+│   ├── Shell.tsx         gated document entrance + floating theme switch
 │   ├── ThemeToggle.tsx   dark/light switch
 │   ├── Reveal.tsx        Reveal / RevealGroup / RevealItem / MaskLine
 │   ├── SectionTitle.tsx  navy serif heading with drawing underline
