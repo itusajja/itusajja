@@ -268,5 +268,5 @@ export const resume: ResumeData = {
     },
   ],
 
-  updatedOn: "updated on aug 2025",
+  updatedOn: "updated sept 2026",
 };
