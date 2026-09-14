@@ -30,7 +30,7 @@ export function Hero() {
         <IndonesiaDotMap className="w-[min(92%,640px)] opacity-80" />
       </motion.div>
 
-      <div className="relative mx-auto max-w-5xl">
+      <div className="relative mx-auto max-w-[1100px]">
         {/* row 1 — logo + name ……… availability */}
         <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-4">
           <div className="flex items-center gap-3 sm:gap-4">
